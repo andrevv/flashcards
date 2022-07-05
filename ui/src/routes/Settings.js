@@ -3,7 +3,7 @@ import { UserContext } from "../contexts";
 
 export default function Settings() {
   const [text, setText] = useState();
-  const user = useContext(UserContext);
+  const {user, setUser} = useContext(UserContext);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -13,7 +13,7 @@ export default function Settings() {
 
   return (
     <h1>
-      Settings {user.user} {text}
+      Settings {user} {text}
     </h1>
   );
 }

@@ -1,3 +1,4 @@
+import email
 from flask import Blueprint, Response, jsonify, make_response, redirect, request
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -30,7 +31,7 @@ def login():
     return jsonify(user=current_user.email)
 
 
-@bp.route('/logout', methods=['GET'])
+@bp.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
@@ -57,3 +58,9 @@ def register():
     login_user(user=new_user, remember=True)
 
     return Response(status=200)
+
+
+@bp.route('/user', methods=['GET'])
+@login_required
+def user():
+    return jsonify(email=current_user.email)
