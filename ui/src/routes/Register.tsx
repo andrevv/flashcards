@@ -2,9 +2,9 @@ import { useState } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/outline";
 
 export default function Register() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [error, setError] = useState();
+  const [email, setEmail] = useState<string>();
+  const [password, setPassword] = useState<string>();
+  const [error, setError] = useState<string>();
 
   return (
     <div className="selection:bg-rose-500 selection:text-white">

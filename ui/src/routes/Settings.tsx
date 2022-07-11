@@ -1,9 +1,7 @@
-import { useEffect, useContext, useState } from "react";
-import { UserContext } from "../contexts";
+import { useEffect, useState } from "react";
 
 export default function Settings() {
   const [text, setText] = useState();
-  const {user, setUser} = useContext(UserContext);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -13,7 +11,7 @@ export default function Settings() {
 
   return (
     <h1>
-      Settings {user} {text}
+      Settings {text}
     </h1>
   );
 }
