@@ -7,10 +7,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<string>();
 
   useEffect(() => {
-    console.log(user);
-  }, [user]);
-
-  useEffect(() => {
     const getCurrentUser = async () => {
       const resp = await fetch("/api/auth/me");
       if (resp.status !== 200) {
