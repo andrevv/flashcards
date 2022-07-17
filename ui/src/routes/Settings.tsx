@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import useAuth from "../hooks/useAuth";
 
 export default function Settings() {
   const [text, setText] = useState();
+  const auth = useAuth();
 
   useEffect(() => {
     fetch("/api/settings")
@@ -11,7 +13,7 @@ export default function Settings() {
 
   return (
     <h1>
-      Settings {text}
+      Settings {text} for {auth.user}.
     </h1>
   );
 }

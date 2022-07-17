@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { ReactNode } from "react";
 import AuthContext from "../contexts/AuthContext";
+import Loader from "./Loader";
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<string>();
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   useEffect(() => {
     const getCurrentUser = async () => {
@@ -47,7 +52,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{ user, signIn, signOut }}>
-      {children}
+      {user ? children : <Loader />}
     </AuthContext.Provider>
   );
 }
