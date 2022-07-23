@@ -2,13 +2,17 @@ import { useContext, useState } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/outline";
 import AuthContext from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+
+interface Values {
+  email: string;
+  password: string;
+}
 
 export default function Login() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>();
   const auth = useContext(AuthContext);
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
 
   return (
     <div className="selection:bg-rose-500 selection:text-white">
@@ -38,60 +42,57 @@ export default function Login() {
                   <div>{error}</div>
                 </div>
               )}
-              <form action="" className="mt-12">
-                <div className="relative">
-                  <input
-                    type="text"
-                    id="email"
-                    name="email"
-                    className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-rose-600 placeholder-transparent"
-                    placeholder="Email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <label
-                    htmlFor="email"
-                    className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm cursor-text"
-                  >
-                    Email address
-                  </label>
-                </div>
-                <div className="mt-10 relative">
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-rose-600 placeholder-transparent"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <label
-                    htmlFor="password"
-                    className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm cursor-text"
-                  >
-                    Password
-                  </label>
-                </div>
-                <input
-                  type="submit"
-                  value="Sign in"
-                  className="mt-20 px-4 py-2 rounded bg-rose-500 hover:bg-rose-400 text-white font-semibold text-center block w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-rose-500 focus:ring-opacity-50 cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setError(null);
-                    auth.signIn(email, password, () => {
-                      navigate("/");
-                    });
-                  }}
-                />
-              </form>
-              <a
-                href="/"
-                className="mt-4 block text-sm text-center font-medium text-rose-500 hover:underline focus:ouline-none focus:ring-2 focus:ring-rose-500"
+              <Formik
+                initialValues={{ email: "", password: "" }}
+                onSubmit={async (
+                  { email, password }: Values,
+                  { setSubmitting }: FormikHelpers<Values>
+                ) => {
+                  await auth.signIn(email, password, () => {
+                    navigate("/");
+                    setSubmitting(false);
+                  });
+                }}
               >
-                Forgot your password?
-              </a>
+                <Form action="" className="mt-12">
+                  <div className="relative">
+                    <Field
+                      type="text"
+                      id="email"
+                      name="email"
+                      className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-rose-600 placeholder-transparent"
+                      placeholder="Email address"
+                    />
+                    <label
+                      htmlFor="email"
+                      className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm cursor-text"
+                    >
+                      Email address
+                    </label>
+                  </div>
+                  <div className="mt-10 relative">
+                    <Field
+                      type="password"
+                      id="password"
+                      name="password"
+                      className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-rose-600 placeholder-transparent"
+                      placeholder="Password"
+                    />
+                    <label
+                      htmlFor="password"
+                      className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm cursor-text"
+                    >
+                      Password
+                    </label>
+                  </div>
+                  <button
+                    type="submit"
+                    className="mt-20 px-4 py-2 rounded bg-rose-500 hover:bg-rose-400 text-white font-semibold text-center block w-full focus:outline-none focus:ring focus:ring-offset-2 focus:ring-rose-500 focus:ring-opacity-50 cursor-pointer"
+                  >
+                    Sign In
+                  </button>
+                </Form>
+              </Formik>
             </div>
           </div>
         </div>

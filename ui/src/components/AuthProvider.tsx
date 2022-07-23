@@ -23,8 +23,12 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     getCurrentUser();
   }, []);
 
-  const signIn = (email: string, password: string, callback: VoidFunction) => {
-    fetch("/api/auth/login", {
+  const signIn = async (
+    email: string,
+    password: string,
+    callback: VoidFunction
+  ) => {
+    const resp = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -34,27 +38,23 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         email: email,
         password: password,
       }),
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.error) {
-          // setError(data.error);
-          return;
-        }
+    });
 
-        setUser(data.user);
-        callback();
-      });
+    const data = await resp.json();
+    if (data.error) {
+    }
+
+    setUser(data.user);
+    callback();
   };
 
-  const signOut = (callback: VoidFunction) => {
-    fetch("/api/auth/logout", {
+  const signOut = async (callback: VoidFunction) => {
+    await fetch("/api/auth/logout", {
       method: "POST",
-    })
-    .then(() => {
-      setUser(null);
-      callback();
     });
+
+    setUser(null);
+    callback();
   };
 
   return (

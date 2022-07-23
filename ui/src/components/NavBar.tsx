@@ -99,7 +99,7 @@ export default function NavBar() {
                                 } block px-4 py-2 text-sm text-gray-700`}
                                 onClick={async (e) => {
                                   e.preventDefault();
-                                  auth.signOut(() => navigate("/"));
+                                  await auth.signOut(() => navigate("/"));
                                 }}
                               >
                                 Sign out
