@@ -47,7 +47,15 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       });
   };
 
-  const signOut = () => {};
+  const signOut = (callback: VoidFunction) => {
+    fetch("/api/auth/logout", {
+      method: "POST",
+    })
+    .then(() => {
+      setUser(null);
+      callback();
+    });
+  };
 
   return (
     <AuthContext.Provider value={{ user, signIn, signOut }}>

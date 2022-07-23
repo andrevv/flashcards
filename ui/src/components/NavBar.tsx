@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const user = {
   name: "Tom Cook",
@@ -26,6 +28,9 @@ function classNames(...classes) {
 }
 
 export default function NavBar() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
   return (
     <>
       <Disclosure as="nav" className="bg-gray-800">
@@ -85,21 +90,22 @@ export default function NavBar() {
                         leaveTo="transform opacity-0 scale-95"
                       >
                         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          {userNavigation.map((item) => (
-                            <Menu.Item key={item.name}>
-                              {({ active }) => (
-                                <a
-                                  href={item.href}
-                                  className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
-                                  )}
-                                >
-                                  {item.name}
-                                </a>
-                              )}
-                            </Menu.Item>
-                          ))}
+                          <Menu.Item>
+                            {({ active }) => (
+                              <a
+                                href="/"
+                                className={`${
+                                  active ? "bg-gray-100" : ""
+                                } block px-4 py-2 text-sm text-gray-700`}
+                                onClick={async (e) => {
+                                  e.preventDefault();
+                                  auth.signOut(() => navigate("/"));
+                                }}
+                              >
+                                Sign out
+                              </a>
+                            )}
+                          </Menu.Item>
                         </Menu.Items>
                       </Transition>
                     </Menu>
@@ -157,9 +163,11 @@ export default function NavBar() {
                 </div>
                 <div className="mt-3 px-2 space-y-1">
                   <Disclosure.Button
-                    as="a"
-                    href={"/"}
                     className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      console.log("here");
+                    }}
                   >
                     Sign Out
                   </Disclosure.Button>

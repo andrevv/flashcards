@@ -30,7 +30,7 @@ def login():
     return jsonify(user=current_user.email)
 
 
-@bp.route('/logout', methods=['GET'])
+@bp.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
