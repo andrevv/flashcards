@@ -5,16 +5,19 @@ import Loader from "./Loader";
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<string>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getCurrentUser = async () => {
       const resp = await fetch("/api/auth/me");
       if (resp.status !== 200) {
+        setIsLoading(false);
         return;
       }
 
       const data = await resp.json();
       setUser(data.email);
+      setIsLoading(false);
     };
 
     getCurrentUser();
@@ -48,7 +51,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{ user, signIn, signOut }}>
-      {user ? children : <Loader />}
+      {isLoading ? <Loader /> : children}
     </AuthContext.Provider>
   );
 }
