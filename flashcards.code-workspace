@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"typescript.preferences.quoteStyle": "single",
+		"cSpell.words": [
+			"Formik"
+		]
+	}
+}
